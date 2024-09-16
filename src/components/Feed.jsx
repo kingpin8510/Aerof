@@ -11,31 +11,48 @@ const Feed = () => {
   const [pins, setPins] = useState(null);
   const { categoryId } = useParams();
 
-  useEffect(() => {
-    setLoading(true);
-    if (categoryId) {
-      const query = searchQuery(categoryId);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   if (categoryId) {
+  //     const query = searchQuery(categoryId);
 
-      client.fetch(query).then((data) => {
-        setPins(data);
-        setLoading(false);
-      });
-    } else {
-      client.fetch(feedQuery).then((data) => {
-        setPins(data);
-        setLoading(false);
-      });
-    }
+  //     client.fetch(query).then((data) => {
+  //       setPins(data);
+  //       setLoading(false);
+  //     });
+  //   } else {
+  //     client.fetch(feedQuery).then((data) => {
+  //       setPins(data);
+  //       setLoading(false);
+  //     });
+  //   }
+  // }, [categoryId]);
+
+  useEffect(() => {
+    const fetchPins = async () => {
+      setLoading(true);
+      if (categoryId) {
+        const query = searchQuery(categoryId);
+
+        
+        const response = await client.fetch(query);
+        setPins(response);
+      } else {
+        const query = feedQuery;
+        const response = await client.fetch(query);
+        setPins(response);
+      }
+      setLoading(false);
+    };
+    fetchPins();
   }, [categoryId]);
 
   if (loading)
     return <Spinner message="We are adding new ideas to your feed!" />;
 
-  if(!pins?.length) return <h2>No Pins Available</h2>
+  if (!pins?.length) return <h2>No Pins Available</h2>;
 
-  return <div>
-    {pins && <MasonryLayout pins={pins}/>}
-  </div>;
+  return <div>{pins && <MasonryLayout pins={pins} />}</div>;
 };
 
 export default Feed;

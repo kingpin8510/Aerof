@@ -6,8 +6,7 @@ import shareVideo from "../assets/share.mp4";
 import logo from "../assets/logowhite.png";
 
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from 'jwt-decode'; // to decode the credential response
-
+import { jwtDecode } from "jwt-decode"; // to decode the credential response
 
 import { client } from "../client";
 
@@ -47,6 +46,8 @@ const Login = () => {
 
     // Store the user in Sanity or your database
     client.createIfNotExists(doc).then(() => {
+      // Store the user ID in the local storage This is a new line induced in this..
+      localStorage.setItem("userId", googleId);
       navigate("/", { replace: true });
     });
   };

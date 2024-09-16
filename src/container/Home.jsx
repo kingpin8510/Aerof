@@ -15,13 +15,31 @@ const Home = () => {
   const [user, setUser] = useState(null);
   const scrollRef = useRef(null);
 
-  const userInfo = fetchUser()
+  const userInfo = fetchUser();
+  const userId = localStorage.getItem("userId");
+
+  // useEffect(() => {
+  //   const query = userQuery(userInfo?.googleId);
+  //   client.fetch(query).then((data) => {
+  //     setUser(data[0]);
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     const userData = await fetchUser();
+  //     setUser(userData);
+  //   };
+  //   fetchUserData();
+  // }, []);  //Second draft
 
   useEffect(() => {
-    const query = userQuery(userInfo?.googleId);
-    client.fetch(query).then((data) => {
+    const fetchUserData = async () => {
+      const query = userQuery(userId);
+      const data = await client.fetch(query);
       setUser(data[0]);
-    });
+    };
+    fetchUserData();
   }, []);
 
   useEffect(() => {
