@@ -18,7 +18,7 @@ const notActiveBtnStyles =
   "bg-primary mr-4 text-black font-bold p-2 rounded-full w-20 outline-none";
 
 const randomImage =
-  "https://source.unsplash.com/1600x900/?nature,photography,technology";
+  "https://picsum.photos/1600/900?random";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
