@@ -33,7 +33,7 @@ const Home = () => {
   //   fetchUserData();
   // }, []);  //Second draft
 
-  useEffect(() => {
+    useEffect(() => {
     const fetchUserData = async () => {
       const query = userQuery(userId);
       const data = await client.fetch(query);
