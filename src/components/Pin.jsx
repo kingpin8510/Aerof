@@ -30,10 +30,10 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
         .insert("after", "save[-1]", [
           {
             _key: uuidv4(),
-            userId: user.googleId,
+            userId: user?.googleId,
             postedBy: {
               _type: "postedBy",
-              _ref: user.googleId,
+              _ref: user?.googleId,
             },
           },
         ])
