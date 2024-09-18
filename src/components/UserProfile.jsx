@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useParams, useNavigate } from "react-router-dom";
 // import { GoogleLogout } from "react-google-login";
+import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 
 import {
   userCreatedPinsQuery,
@@ -17,8 +18,7 @@ const activeBtnStyles =
 const notActiveBtnStyles =
   "bg-primary mr-4 text-black font-bold p-2 rounded-full w-20 outline-none";
 
-const randomImage =
-  "https://picsum.photos/1600/900?random";
+const randomImage = "https://picsum.photos/1600/900?random";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -28,6 +28,23 @@ const UserProfile = () => {
 
   const navigate = useNavigate();
   const { userId } = useParams();
+
+  const handleLogout = () => {
+    googleLogout(); // Logs out the user from Google
+    logout(); // Your custom logout function
+  };
+
+  const logout = () => {
+    // Clear user session (assuming user data is stored in localStorage or sessionStorage)
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    // Optionally, you can also clear cookies if you're using them for session management
+    // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    // Redirect to login or home page after logout
+    navigate("/login");
+  };
 
   useEffect(() => {
     const query = userQuery(userId);
@@ -51,11 +68,6 @@ const UserProfile = () => {
       });
     }
   }, [text, userId]);
-
-  const logout = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
 
   if (!user) return <Spinner message="Loading profile..." />;
 
@@ -96,6 +108,26 @@ const UserProfile = () => {
                 />
               )}
             </div> */}
+
+            <div className="absolute top-0 z-1 right-0 p-2">
+              {userId === user._id && (
+                <GoogleOAuthProvider
+                  clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
+                >
+                  <div className="absolute top-0 z-1 right-0 p-2">
+                    {userId === user._id && (
+                      <button
+                        type="button"
+                        className="bg-white p-2 rounded-full cursor-pointer outline-none shadow-md"
+                        onClick={handleLogout}
+                      >
+                        <AiOutlineLogout color="red" fontSize={21} />
+                      </button>
+                    )}
+                  </div>
+                </GoogleOAuthProvider>
+              )}
+            </div>
           </div>
           <div className="text-center mb-7">
             <button
@@ -141,14 +173,4 @@ const UserProfile = () => {
 
 export default UserProfile;
 
-
-
-
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
